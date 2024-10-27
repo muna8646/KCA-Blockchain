@@ -57,13 +57,15 @@ function App() {
     const [newMessage, setNewMessage] = useState("");
     const [initialNumber, setInitialNumber] = useState("");
 
-    // Initialize the Web3 object
-    const web3 = new Web3(window.ethereum);
+    // Memoize the Web3 object
+    const web3 = useMemo(() => {
+        return new Web3(window.ethereum);
+    }, []); // Only initialize once when the component mounts
 
     // Memoize the myContract instance
     const myContract = useMemo(() => {
         return new web3.eth.Contract(ABI, ADDRESS);
-    }, [web3, ABI, ADDRESS]);
+    }, [web3]); // Depend only on the memoized web3
 
     // Function to connect to MetaMask
     const connectToMetaMask = async () => {
